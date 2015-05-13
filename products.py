@@ -2,7 +2,7 @@ from google.appengine.api import mail
 import webapp2
 import requests
 
-
+# Content for default page
 default_page = """
 <html>
   <body>
@@ -40,10 +40,11 @@ class receiveRequest(object):
 
     @staticmethod
     def sendError(email, error):
-        """Send error to email in JSON body"""
+        """Address error to email in JSON body
+            email address is sourced from incoming HTTP request
+        """
         msg = mail.EmailMessage(sender='habukagumba@gmail.com',
                                 subject='Subject line here')
-        # email from failed test
         msg.to = email
         msg.body = """
         Error: %s
@@ -57,7 +58,9 @@ class receiveRequest(object):
         # Collect all revelant data and validate (write tests)
         # product description super-simple example
         if products['product']['description'] is None:
+            # build error message for email
             error = 'Description not included!'
+            # assign email address
             email = products['email']
             return cls.sendError(email, error)
 
@@ -79,6 +82,7 @@ class ProductHandler(webapp2.RequestHandler):
     """Handle HTTP endpoint to recieve JSON of products. """
 
     def post(self):
+        # use uploaded file for demo purposes
         receiveRequest(
             'http://s3-us-west-2.amazonaws.com/hshtmlemail/products.json'
         ).main()
