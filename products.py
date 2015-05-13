@@ -56,7 +56,7 @@ class receiveRequest(object):
         products = cls.endpoint(url)
         # Collect all revelant data and validate (write tests)
         # product description super-simple example
-        if products['product']['description'] is not None:
+        if products['product']['description'] is None:
             error = 'Description not included!'
             email = products['email']
             return cls.sendError(email, error)
